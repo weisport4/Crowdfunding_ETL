@@ -5,7 +5,7 @@
 CREATE TABLE "category" (
     "category_id" VARCHAR(10)   NOT NULL,
     "category" VARCHAR(50)   NOT NULL,
-    "last_update" timestamp   NOT NULL,
+    "last_update" timestamp  DEFAULT Localtimestamp NOT NULL,
     CONSTRAINT "pk_category" PRIMARY KEY (
         "category_id"
      )
@@ -14,7 +14,7 @@ CREATE TABLE "category" (
 CREATE TABLE "sub_category" (
     "sub_category_id" VARCHAR(12)   NOT NULL,
     "sub_category" VARCHAR(50)   NOT NULL,
-    "last_update" timestamp   NOT NULL,
+    "last_update" timestamp  DEFAULT Localtimestamp NOT NULL,
     CONSTRAINT "pk_sub_category" PRIMARY KEY (
         "sub_category_id"
      )
@@ -37,7 +37,7 @@ CREATE TABLE "campaign" (
     "sportlight" boolean   NOT NULL,
     "category_id" VARCHAR(10)   NOT NULL,
     "subcategory_id" VARCHAR(12)   NOT NULL,
-    "last_update" timestamp   NOT NULL,
+    "last_update" timestamp  DEFAULT Localtimestamp NOT NULL,
     CONSTRAINT "pk_campaign" PRIMARY KEY (
         "funding_id"
      )
@@ -48,7 +48,7 @@ CREATE TABLE "contact" (
     "first_name" VARCHAR(30)   NOT NULL,
     "last_name" VARCHAR(30)   NOT NULL,
     "email" VARCHAR(50)   NOT NULL,
-    "last_update" timestamp   NOT NULL,
+    "last_update" timestamp  DEFAULT Localtimestamp NOT NULL,
     CONSTRAINT "pk_contact" PRIMARY KEY (
         "contact_id"
      )

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, text, func
 import pandas as pd
 import datetime as dt
+import config as cfg
 
 
 
@@ -15,11 +16,11 @@ class SQLHelper():
     # define properties
     def __init__(self):
         # Setup the Postgres connection variables
-        SQL_USERNAME = 'postgres'
-        SQL_PASSWORD = 'password'
-        SQL_IP = 'localhost'
-        SQL_PORT = '5432'
-        DATABASE = 'crowdfunding_db'
+        SQL_USERNAME = cfg.SQL_USERNAME
+        SQL_PASSWORD = cfg.SQL_PASSWORD
+        SQL_IP = cfg.SQL_IP
+        SQL_PORT = cfg.SQL_PORT
+        DATABASE = cfg.DATABASE
 
         connection_string = f'postgresql+psycopg2://{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_IP}:{SQL_PORT}/{DATABASE}'
         # Connect to PostgreSQL server

@@ -18,7 +18,7 @@ def welcome():
             Welcome to the Climate Analysis API!                                                        <br/>
             Available Routes:                                                                           <br/>
             &nbsp;&nbsp;&nbsp;&nbsp;<a href="/api/v1.0/analysis1_orm">/api/v1.0/analysis1_orm</a>       <br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;<a href="/api/v1.0/analysis1_sql">/api/v1.0/analysis1_sql</a>       <br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a href="/api/v1.0/analysis1_sql">/api/v1.0/pledges_per_goal_by_country_sql</a>       <br/>
             ''')
 
 
@@ -28,9 +28,9 @@ def analysis1_orm():
     return (jsonify(data))
 
 
-@app.route("/api/v1.0/analysis1_sql")
-def analysis1_sql():
-    data = sql.query_analysis1_sql()
+@app.route("/api/v1.0/pledges_per_goal_by_country_sql")
+def pledges_per_goal_by_country_sql():
+    data = sql.query_pledges_per_goal_by_country_sql()
     return (jsonify(data))
 
 

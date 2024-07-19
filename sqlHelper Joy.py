@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, text, func
 import pandas as pd
 import datetime as dt
+import config as cfg
 
 
 
@@ -15,11 +16,11 @@ class SQLHelper():
     # define properties
     def __init__(self):
         # Setup the Postgres connection variables
-        SQL_USERNAME = 'postgres'
-        SQL_PASSWORD = 'password'
-        SQL_IP = 'localhost'
-        SQL_PORT = '5432'
-        DATABASE = 'crowdfunding_db'
+        SQL_USERNAME = cfg.SQL_USERNAME
+        SQL_PASSWORD = cfg.SQL_PASSWORD
+        SQL_IP = cfg.SQL_IP
+        SQL_PORT = cfg.SQL_PORT
+        DATABASE = cfg.DATABASE
 
         connection_string = f'postgresql+psycopg2://{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_IP}:{SQL_PORT}/{DATABASE}'
         # Connect to PostgreSQL server
@@ -55,16 +56,40 @@ class SQLHelper():
         data = analysis1_df.to_dict(orient="records")
         return (data)
 
-    def query_analysis1_sql(self):
-        # Find the most recent date in the data set.
-        query = """
-                SELECT 
-                FROM 
-                WHERE 
-                ORDER BY ;
+    def query_pledges_per_goal_by_country_sql(self, country):
+        # Number of Campaigns by Country which reached various pledges per goal
+        query = f"""
+                    SELECT
+                        country,
+                        SUM(perfect) AS goalreached,
+                        SUM(ninety) AS ninetypercent_goalreached,
+                        SUM(eighty) AS eightypercent_goalreached,
+                        SUM(seventy) AS seventypercent_goalreached,
+                        SUM(sixty) AS sixtypercent_goalreached,
+                        SUM(fifty) AS fiftypercent_goalreached,
+                        SUM(fail) AS lessthanfiftypercent_goalreached,
+                        COUNT(Country) AS grand_total
+                    FROM
+                        (
+                        SELECT
+                            country,
+                            CASE WHEN pledged >= goal then 1 else 0 END AS perfect,
+                            CASE WHEN pledged >= goal * 0.9 AND pledged < goal then 1 else 0 END AS ninety,
+                            CASE WHEN pledged >= goal * 0.8 AND pledged < goal * 0.9 then 1 else 0 END AS eighty,
+                            CASE WHEN pledged >= goal * 0.7 AND pledged < goal * 0.8 then 1 else 0 END AS seventy,
+                            CASE WHEN pledged >= goal * 0.6 AND pledged < goal * 0.7 then 1 else 0 END AS sixty,
+                            CASE WHEN pledged >= goal * 0.5 AND pledged < goal * 0.6 then 1 else 0 END AS fifty,
+                            CASE WHEN pledged < goal * 0.5 then 1 else 0 END AS fail
+                        FROM
+                            campaign
+                        )
+                    GROUP BY
+                        country
+                    HAVING
+                        country = '{start}';
                 """
 
         # Save the query results as a Pandas DataFrame
-        analysis1_df = pd.read_sql(text(query), con=self.engine)
-        data = analysis1_df.to_dict(orient="records")
+        pledges_per_goal_by_country_df = pd.read_sql(text(query), con=self.engine)
+        data = pledges_per_goal_by_country_df.to_dict(orient="records")
         return (data)

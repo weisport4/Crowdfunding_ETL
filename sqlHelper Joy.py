@@ -83,7 +83,7 @@ class SQLHelper():
                         FROM
                             campaign
                         )
-                    GROUP BY
+                    GROUsP BY
                         country
                     HAVING
                         country = '{start}';
